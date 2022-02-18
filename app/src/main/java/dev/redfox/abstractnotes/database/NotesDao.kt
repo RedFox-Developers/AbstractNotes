@@ -5,12 +5,12 @@ import androidx.room.*
 @Dao
 interface NotesDao {
 
-    @get:Query("SELECT * FROM notes ORDER BY id DESC")
-    val allNotes: List<Notes>
+    @Query("SELECT * FROM notes ORDER BY id DESC")
+    suspend fun getAllNotes() : List<Notes>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNotes(note: Notes)
+    suspend fun insertNotes(note: Notes)
 
     @Delete
-    fun deleteNotes(note: Notes)
+    suspend fun deleteNotes(note: Notes)
 }

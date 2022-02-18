@@ -14,4 +14,6 @@
     <color name="ColorPurple">#8F48FF</color>
     <color name="ColorGreen">#59FF6F</color>
     <color name="ColorOrange">#FB961A</color>
+    <color name="ColorLightBlack">#5A414F</color>
+    <color name="ColorText">#BF6375</color>
 </resources>

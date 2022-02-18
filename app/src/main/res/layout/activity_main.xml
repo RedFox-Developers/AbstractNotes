@@ -4,91 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/tv1"
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/notes"
-        android:textColor="@color/ColorWhite"
-        android:textSize="@dimen/_15sdp"
-        android:fontFamily="@font/sofia_pro_soft_medium"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingTop="@dimen/_10sdp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_height="match_parent">
 
-    <SearchView
-        android:id="@+id/search_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:queryHint="@string/search"
-        android:theme="@style/ThemeOverlay.search"
-        android:iconifiedByDefault="false"
-        android:searchIcon="@drawable/ic_search"
-        android:background="@drawable/background"
-        app:layout_constraintTop_toBottomOf="@id/tv1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        <fragment
+            android:id="@+id/navHostFragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_graph"
+            />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        app:layout_constraintTop_toBottomOf="@id/search_view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/recycler_view"/>
-
-    <LinearLayout
-        android:id="@+id/linlay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="@dimen/_10sdp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_checked"
-            app:tint="@color/ColorWhite" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:src="@drawable/ic_image"
-            app:tint="@color/ColorWhite" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_link"
-            app:tint="@color/ColorWhite" />
-
-    </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorAccent"
-        app:tint="@color/ColorWhite"
-        android:src="@drawable/ic_add"
-        android:layout_marginEnd="@dimen/_21sdp"
-        android:layout_marginBottom="@dimen/_25sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
