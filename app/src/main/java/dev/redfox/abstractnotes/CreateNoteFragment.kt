@@ -28,6 +28,7 @@ import java.util.*
 class CreateNoteFragment : BaseFragment() {
     var selectedColor = "#39A3F6"
     var currentDate: String? = null
+    private var webLink = ""
     private var noteId = -1
     private var _binding: FragmentCreateNoteBinding? = null
     private val binding
@@ -102,7 +103,13 @@ class CreateNoteFragment : BaseFragment() {
             }
         }
         binding.btnCancel.setOnClickListener {
-            binding.layoutWebUrl.visibility = View.GONE
+            if(noteId!=-1){
+                binding.tvWebLink.visibility=View.VISIBLE
+                binding.layoutWebUrl.visibility=View.GONE
+            }
+            else{
+                binding.layoutWebUrl.visibility=View.GONE
+            }
         }
 
         binding.tvWebLink.setOnClickListener{
@@ -128,7 +135,7 @@ class CreateNoteFragment : BaseFragment() {
                 notes.noteText = binding.etNoteDesc.text.toString()
                 notes.dateTime = currentDate
                 notes.color = selectedColor
-                notes.webLink = binding.etWebLink.text.toString()
+                notes.webLink = webLink
                 context?.let {
                     NotesDatabase.getDatabase(it).notesDao().insertNotes(notes)
                     binding.etNoteDesc.setText("")
@@ -182,6 +189,7 @@ class CreateNoteFragment : BaseFragment() {
             binding.layoutWebUrl.visibility = View.GONE
             binding.etWebLink.isEnabled = false
             binding.tvWebLink.visibility = View.VISIBLE
+            webLink=binding.etWebLink.text.toString()
             binding.tvWebLink.text = binding.etWebLink.text.toString()
 
         } else {
