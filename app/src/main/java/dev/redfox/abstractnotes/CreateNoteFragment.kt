@@ -1,5 +1,6 @@
 package dev.redfox.abstractnotes
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -21,6 +22,7 @@ import dev.redfox.abstractnotes.databinding.FragmentCreateNoteBinding
 import dev.redfox.abstractnotes.databinding.FragmentHomeBinding
 import dev.redfox.abstractnotes.util.NoteBottomSheetFragment
 import kotlinx.coroutines.launch
+import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,20 +32,23 @@ class CreateNoteFragment : BaseFragment() {
     var currentDate: String? = null
     private var webLink = ""
     private var noteId = -1
+
+
     private var _binding: FragmentCreateNoteBinding? = null
     private val binding
         get() = _binding!!
 
+    @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//        noteId = requireArguments().getInt("noteId",-1)
+//        noteId = requireArguments().getInt("noteId", -1)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         _binding = FragmentCreateNoteBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -60,6 +65,32 @@ class CreateNoteFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (noteId != -1) {
+
+            launch {
+                context?.let {
+                    var notes = NotesDatabase.getDatabase(it).notesDao().getSpecificNote(noteId)
+                    binding.colorView.setBackgroundColor(Color.parseColor(notes.color))
+                    binding.etNoteTitle.setText(notes.title)
+                    binding.etNoteSubTitle.setText(notes.subTitle)
+                    binding.etNoteDesc.setText(notes.noteText)
+                    binding.tvWebLink.visibility = View.GONE
+
+                    if (notes.webLink != "") {
+                        webLink = notes.webLink!!
+                        binding.tvWebLink.text = notes.webLink
+                        binding.layoutWebUrl.visibility = View.VISIBLE
+                        binding.etWebLink.setText(notes.webLink)
+                        binding.imgUrlDelete.visibility = View.VISIBLE
+                    } else {
+                        binding.imgUrlDelete.visibility = View.GONE
+                        binding.layoutWebUrl.visibility = View.GONE
+                    }
+                }
+            }
+        }
+
 
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
             BroadcastReceiver, IntentFilter("bottom_sheet_action")
@@ -84,9 +115,11 @@ class CreateNoteFragment : BaseFragment() {
             }
         }
 
+
         binding.imgBack.setOnClickListener {
             findNavController().navigate(R.id.action_createNoteFragment_to_homeFragment)
         }
+
 
         binding.imgMore.setOnClickListener {
             var noteBottomSheetFragment = NoteBottomSheetFragment.newInstance(noteId)
@@ -95,6 +128,8 @@ class CreateNoteFragment : BaseFragment() {
                 "Note Bottom Sheet Fragment"
             )
         }
+
+
         binding.btnOk.setOnClickListener {
             if (binding.etWebLink.text.toString().trim().isNotEmpty()) {
                 checkWebUrl()
@@ -102,19 +137,45 @@ class CreateNoteFragment : BaseFragment() {
                 Toast.makeText(requireContext(), "Url is required", Toast.LENGTH_SHORT).show()
             }
         }
+
+
         binding.btnCancel.setOnClickListener {
-            if(noteId!=-1){
-                binding.tvWebLink.visibility=View.VISIBLE
-                binding.layoutWebUrl.visibility=View.GONE
-            }
-            else{
-                binding.layoutWebUrl.visibility=View.GONE
+            if (noteId != -1) {
+                binding.tvWebLink.visibility = View.VISIBLE
+                binding.layoutWebUrl.visibility = View.GONE
+            } else {
+                binding.layoutWebUrl.visibility = View.GONE
             }
         }
 
-        binding.tvWebLink.setOnClickListener{
-            var intent =Intent(Intent.ACTION_VIEW, Uri.parse(binding.etWebLink.text.toString()))
+        binding.tvWebLink.setOnClickListener {
+            var intent = Intent(Intent.ACTION_VIEW, Uri.parse(binding.etWebLink.text.toString()))
             startActivity(intent)
+        }
+    }
+
+    private fun updateNote() {
+        launch {
+
+            context?.let {
+                var notes = NotesDatabase.getDatabase(it).notesDao().getSpecificNote(noteId)
+
+                notes.title = binding.etNoteTitle.text.toString()
+                notes.subTitle = binding.etNoteSubTitle.text.toString()
+                notes.noteText = binding.etNoteDesc.text.toString()
+                notes.dateTime = currentDate
+                notes.color = selectedColor
+                notes.webLink = webLink
+
+                NotesDatabase.getDatabase(it).notesDao().updateNote(notes)
+                binding.etNoteTitle.setText("")
+                binding.etNoteSubTitle.setText("")
+                binding.etNoteDesc.setText("")
+                binding.layoutImage.visibility = View.GONE
+                binding.imgNote.visibility = View.GONE
+                binding.tvWebLink.visibility = View.GONE
+                findNavController().navigate(R.id.action_createNoteFragment_to_homeFragment)
+            }
         }
     }
 
@@ -130,18 +191,21 @@ class CreateNoteFragment : BaseFragment() {
         } else {
             launch {
                 var notes = Notes()
+
                 notes.title = binding.etNoteTitle.text.toString()
                 notes.subTitle = binding.etNoteSubTitle.text.toString()
                 notes.noteText = binding.etNoteDesc.text.toString()
                 notes.dateTime = currentDate
                 notes.color = selectedColor
                 notes.webLink = webLink
+
                 context?.let {
                     NotesDatabase.getDatabase(it).notesDao().insertNotes(notes)
+
                     binding.etNoteDesc.setText("")
                     binding.etNoteTitle.setText("")
                     binding.etNoteSubTitle.setText("")
-                    binding.tvWebLink.visibility=View.GONE
+                    binding.tvWebLink.visibility = View.GONE
                 }
             }
         }
@@ -157,39 +221,12 @@ class CreateNoteFragment : BaseFragment() {
         }
     }
 
-
-    private fun updateNote() {
-        launch {
-
-            context?.let {
-                var notes = NotesDatabase.getDatabase(it).notesDao().getSpecificNote(noteId)
-
-                notes.title = binding.etNoteTitle.text.toString()
-                notes.subTitle = binding.etNoteSubTitle.text.toString()
-                notes.noteText = binding.etNoteDesc.text.toString()
-                notes.dateTime = currentDate
-                notes.color = selectedColor
-//                notes.imgPath = selectedImagePath
-//                notes.webLink = webLink
-
-                NotesDatabase.getDatabase(it).notesDao().updateNote(notes)
-                binding.etNoteTitle.setText("")
-                binding.etNoteSubTitle.setText("")
-                binding.etNoteDesc.setText("")
-                binding.layoutImage.visibility = View.GONE
-                binding.imgNote.visibility = View.GONE
-                binding.tvWebLink.visibility = View.GONE
-                requireActivity().supportFragmentManager.popBackStack()
-            }
-        }
-    }
-
     private fun checkWebUrl() {
         if (Patterns.WEB_URL.matcher(binding.etWebLink.text.toString()).matches()) {
             binding.layoutWebUrl.visibility = View.GONE
             binding.etWebLink.isEnabled = false
             binding.tvWebLink.visibility = View.VISIBLE
-            webLink=binding.etWebLink.text.toString()
+            webLink = binding.etWebLink.text.toString()
             binding.tvWebLink.text = binding.etWebLink.text.toString()
 
         } else {

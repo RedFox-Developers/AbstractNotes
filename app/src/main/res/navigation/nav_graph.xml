@@ -22,5 +22,17 @@
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_createNoteFragment_to_noteBottomSheetFragment"
+            app:destination="@id/noteBottomSheetFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/noteBottomSheetFragment"
+        android:name="dev.redfox.abstractnotes.util.NoteBottomSheetFragment"
+        android:label="NoteBottomSheetFragment" >
+        <action
+            android:id="@+id/action_noteBottomSheetFragment_to_createNoteFragment"
+            app:destination="@id/createNoteFragment"
+            app:popUpTo="@id/createNoteFragment" />
+    </dialog>
 </navigation>
