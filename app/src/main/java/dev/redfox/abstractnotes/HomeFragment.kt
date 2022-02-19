@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.navigation.fragment.findNavController
+import android.widget.Toast
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import dev.redfox.abstractnotes.adapter.NotesAdapter
+import com.codingwithme.notesapp.adapter.NotesAdapter
 import dev.redfox.abstractnotes.database.Notes
 import dev.redfox.abstractnotes.database.NotesDatabase
 import dev.redfox.abstractnotes.databinding.FragmentHomeBinding
@@ -16,15 +16,14 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 class HomeFragment : BaseFragment() {
 
-    var arrNotes = ArrayList<Notes>()
-    var notesAdapter: NotesAdapter = NotesAdapter()
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding : FragmentHomeBinding? = null
     private val binding
         get() = _binding!!
 
+    var arrNotes = ArrayList<Notes>()
+    var notesAdapter: NotesAdapter = NotesAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -35,8 +34,10 @@ class HomeFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     companion object {
@@ -53,12 +54,11 @@ class HomeFragment : BaseFragment() {
 
         binding.recyclerView.setHasFixedSize(true)
 
-        binding.recyclerView.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.recyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
 
         launch {
             context?.let {
-                var notes = NotesDatabase.getDatabase(it).notesDao().getAllNotes()
+                var notes = NotesDatabase.getDatabase(it).noteDao().getAllNotes()
                 notesAdapter!!.setData(notes)
                 arrNotes = notes as ArrayList<Notes>
                 binding.recyclerView.adapter = notesAdapter
@@ -67,8 +67,8 @@ class HomeFragment : BaseFragment() {
 
         notesAdapter!!.setOnClickListener(onClicked)
 
-        binding.fabAddNote.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_createNoteFragment)
+        binding.fabBtnCreateNote.setOnClickListener {
+            replaceFragment(CreateNoteFragment.newInstance(),false)
         }
 
         binding.searchView.setOnQueryTextListener( object : SearchView.OnQueryTextListener{
@@ -92,20 +92,26 @@ class HomeFragment : BaseFragment() {
             }
 
         })
+
+
     }
 
-    private val onClicked = object :NotesAdapter.OnItemClickListener{
-        override fun onClicked(noteId: Int) {
 
-            var fragment = CreateNoteFragment.newInstance()
-            var args = Bundle()
-            args.putInt("noteId",noteId)
-            fragment.arguments = args
+    private val onClicked = object :NotesAdapter.OnItemClickListener{
+        override fun onClicked(notesId: Int) {
+
+
+            var fragment :Fragment
+            var bundle = Bundle()
+            bundle.putInt("noteId",notesId)
+            fragment = CreateNoteFragment.newInstance()
+            fragment.arguments = bundle
 
             replaceFragment(fragment,false)
         }
 
     }
+
 
     fun replaceFragment(fragment:Fragment, istransition:Boolean){
         val fragmentTransition = requireActivity().supportFragmentManager.beginTransaction()
@@ -113,7 +119,8 @@ class HomeFragment : BaseFragment() {
         if (istransition){
             fragmentTransition.setCustomAnimations(android.R.anim.slide_out_right,android.R.anim.slide_in_left)
         }
-        fragmentTransition.replace(R.id.frameLayout,fragment).addToBackStack(fragment.javaClass.simpleName).commit()
+        fragmentTransition.replace(R.id.frame_layout,fragment).addToBackStack(fragment.javaClass.simpleName).commit()
     }
+
 
 }
