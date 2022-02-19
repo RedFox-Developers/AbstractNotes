@@ -11,6 +11,7 @@
         <item name="android:editTextColor">@color/ColorWhite</item>
         <item name="android:textColorHint">@color/ColorGray</item>
         <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="android:backgroundTint">#222222</item>
 
     </style>
 

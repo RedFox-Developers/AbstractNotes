@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
@@ -17,7 +18,7 @@ import dev.redfox.abstractnotes.databinding.FragmentNotesBottomSheetBinding
 
 
 class NoteBottomSheetFragment : BottomSheetDialogFragment() {
-    var selectedColor = "#171C26"
+    var selectedColor = "#FF547B"
     private var _binding: FragmentNotesBottomSheetBinding? = null
     private val binding
         get() = _binding!!
@@ -101,6 +102,11 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun setListener(){
+
+        binding.arrowDown.setOnClickListener {
+            dismiss()
+        }
+
         binding.fNote1.setOnClickListener {
 
             binding.imgNote1.setImageResource(R.drawable.ic_tick)
@@ -109,7 +115,7 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             binding.imgNote5.setImageResource(0)
             binding.imgNote6.setImageResource(0)
             binding.imgNote7.setImageResource(0)
-            selectedColor = "#4e33ff"
+            selectedColor = "#6851FF"
 
             val intent = Intent("bottom_sheet_action")
             intent.putExtra("action","Blue")
@@ -125,7 +131,7 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             binding.imgNote5.setImageResource(0)
             binding.imgNote6.setImageResource(0)
             binding.imgNote7.setImageResource(0)
-            selectedColor = "#654514"
+            selectedColor = "#C59C35"
 
             val intent = Intent("bottom_sheet_action")
             intent.putExtra("action","Yellow")
@@ -141,7 +147,7 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             binding.imgNote5.setImageResource(0)
             binding.imgNote6.setImageResource(0)
             binding.imgNote7.setImageResource(0)
-            selectedColor = "#732993"
+            selectedColor = "#C63272"
 
             val intent = Intent("bottom_sheet_action")
             intent.putExtra("action","Purple")
@@ -157,7 +163,7 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             binding.imgNote5.setImageResource(R.drawable.ic_tick)
             binding.imgNote6.setImageResource(0)
             binding.imgNote7.setImageResource(0)
-            selectedColor = "#0E4E27"
+            selectedColor = "#15A365"
 
             val intent = Intent("bottom_sheet_action")
             intent.putExtra("action","Green")
@@ -173,7 +179,7 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             binding.imgNote5.setImageResource(0)
             binding.imgNote6.setImageResource(R.drawable.ic_tick)
             binding.imgNote7.setImageResource(0)
-            selectedColor = "#A34D25"
+            selectedColor = "#D85E25"
             val intent = Intent("bottom_sheet_action")
             intent.putExtra("action","Orange")
             intent.putExtra("selectedColor",selectedColor)
@@ -187,7 +193,7 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             binding.imgNote5.setImageResource(0)
             binding.imgNote6.setImageResource(0)
             binding.imgNote7.setImageResource(R.drawable.ic_tick)
-            selectedColor = "#3F3F3F"
+            selectedColor = "#515151"
 
             val intent = Intent("bottom_sheet_action")
             intent.putExtra("action","Black")
@@ -195,12 +201,9 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
         }
 
-//        binding.layoutImage.setOnClickListener{
-//            val intent = Intent("bottom_sheet_action")
-//            intent.putExtra("action","Image")
-//            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
-//            dismiss()
-//        }
+        binding.layoutImage.setOnClickListener{
+            Toast.makeText(requireContext(),"Coming Soon", Toast.LENGTH_SHORT).show()
+        }
         binding.layoutWebUrl.setOnClickListener{
             val intent = Intent("bottom_sheet_action")
             intent.putExtra("action","WebUrl")
