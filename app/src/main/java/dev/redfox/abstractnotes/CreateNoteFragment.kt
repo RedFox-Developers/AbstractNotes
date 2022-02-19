@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +29,6 @@ class CreateNoteFragment : BaseFragment() {
     var selectedColor = "#39A3F6"
     var currentDate: String? = null
     private var noteId = -1
-
     private var _binding: FragmentCreateNoteBinding? = null
     private val binding
         get() = _binding!!
@@ -93,6 +94,21 @@ class CreateNoteFragment : BaseFragment() {
                 "Note Bottom Sheet Fragment"
             )
         }
+        binding.btnOk.setOnClickListener {
+            if (binding.etWebLink.text.toString().trim().isNotEmpty()) {
+                checkWebUrl()
+            } else {
+                Toast.makeText(requireContext(), "Url is required", Toast.LENGTH_SHORT).show()
+            }
+        }
+        binding.btnCancel.setOnClickListener {
+            binding.layoutWebUrl.visibility = View.GONE
+        }
+
+        binding.tvWebLink.setOnClickListener{
+            var intent =Intent(Intent.ACTION_VIEW, Uri.parse(binding.etWebLink.text.toString()))
+            startActivity(intent)
+        }
     }
 
     private fun saveNote() {
@@ -111,12 +127,14 @@ class CreateNoteFragment : BaseFragment() {
                 notes.subTitle = binding.etNoteSubTitle.text.toString()
                 notes.noteText = binding.etNoteDesc.text.toString()
                 notes.dateTime = currentDate
-                notes.color= selectedColor
+                notes.color = selectedColor
+                notes.webLink = binding.etWebLink.text.toString()
                 context?.let {
                     NotesDatabase.getDatabase(it).notesDao().insertNotes(notes)
                     binding.etNoteDesc.setText("")
                     binding.etNoteTitle.setText("")
                     binding.etNoteSubTitle.setText("")
+                    binding.tvWebLink.visibility=View.GONE
                 }
             }
         }
@@ -159,84 +177,95 @@ class CreateNoteFragment : BaseFragment() {
         }
     }
 
-        private val BroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-            override fun onReceive(p0: Context?, p1: Intent?) {
+    private fun checkWebUrl() {
+        if (Patterns.WEB_URL.matcher(binding.etWebLink.text.toString()).matches()) {
+            binding.layoutWebUrl.visibility = View.GONE
+            binding.etWebLink.isEnabled = false
+            binding.tvWebLink.visibility = View.VISIBLE
+            binding.tvWebLink.text = binding.etWebLink.text.toString()
 
-                var actionColor = p1!!.getStringExtra("action")
+        } else {
+            Toast.makeText(requireContext(), "Url is not valid", Toast.LENGTH_SHORT).show()
+        }
+    }
 
-                when (actionColor!!) {
+    private val BroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(p0: Context?, p1: Intent?) {
 
-                    "Blue" -> {
-                        selectedColor = p1.getStringExtra("selectedColor")!!
-                        binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+            var actionColor = p1!!.getStringExtra("action")
 
-                    }
+            when (actionColor!!) {
 
-                    "Yellow" -> {
-                        selectedColor = p1.getStringExtra("selectedColor")!!
-                        binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+                "Blue" -> {
+                    selectedColor = p1.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
 
-                    }
+                }
 
+                "Yellow" -> {
+                    selectedColor = p1.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
 
-                    "Purple" -> {
-                        selectedColor = p1.getStringExtra("selectedColor")!!
-                        binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
-
-                    }
-
-
-                    "Green" -> {
-                        selectedColor = p1.getStringExtra("selectedColor")!!
-                        binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
-
-                    }
+                }
 
 
-                    "Orange" -> {
-                        selectedColor = p1.getStringExtra("selectedColor")!!
-                        binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+                "Purple" -> {
+                    selectedColor = p1.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
 
-                    }
+                }
 
 
-                    "Black" -> {
-                        selectedColor = p1.getStringExtra("selectedColor")!!
-                        binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+                "Green" -> {
+                    selectedColor = p1.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
 
-                    }
+                }
+
+
+                "Orange" -> {
+                    selectedColor = p1.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+
+                }
+
+
+                "Black" -> {
+                    selectedColor = p1.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
+
+                }
 
 //                "Image" ->{
 //                    readStorageTask()
 //                    layoutWebUrl.visibility = View.GONE
 //                }
 
-                    "WebUrl" -> {
-                        binding.layoutWebUrl.visibility = View.VISIBLE
-                    }
-                    "DeleteNote" -> {
-                        //delete note
-                        deleteNote()
-                    }
+                "WebUrl" -> {
+                    binding.layoutWebUrl.visibility = View.VISIBLE
+                }
+                "DeleteNote" -> {
+                    //delete note
+                    deleteNote()
+                }
 
+                else -> {
+                    binding.layoutImage.visibility = View.GONE
+                    binding.imgNote.visibility = View.GONE
+                    binding.layoutWebUrl.visibility = View.GONE
+                    selectedColor = p1.getStringExtra("selectedColor")!!
+                    binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
 
-                    else -> {
-                        binding.layoutImage.visibility = View.GONE
-                        binding.imgNote.visibility = View.GONE
-                        binding.layoutWebUrl.visibility = View.GONE
-                        selectedColor = p1.getStringExtra("selectedColor")!!
-                        binding.colorView.setBackgroundColor(Color.parseColor(selectedColor))
-
-                    }
                 }
             }
-
-        }
-
-        override fun onDestroy() {
-            LocalBroadcastManager.getInstance(requireContext())
-                .unregisterReceiver(BroadcastReceiver)
-            super.onDestroy()
         }
 
     }
+
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(requireContext())
+            .unregisterReceiver(BroadcastReceiver)
+        super.onDestroy()
+    }
+
+}
