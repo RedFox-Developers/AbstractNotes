@@ -61,9 +61,35 @@ class HomeFragment : BaseFragment() {
                 binding.recyclerView.adapter = notesAdapter
             }
         }
+
+        notesAdapter!!.setOnClickListener(onClicked)
         binding.fabAddNote.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_createNoteFragment)
         }
+    }
+
+    private val onClicked = object :NotesAdapter.OnItemClickListener{
+        override fun onClicked(notesId: Int) {
+
+
+            var fragment :Fragment
+            var bundle = Bundle()
+            bundle.putInt("noteId",notesId)
+            fragment = CreateNoteFragment.newInstance()
+            fragment.arguments = bundle
+
+            replaceFragment(fragment,false)
+        }
+
+    }
+
+    fun replaceFragment(fragment:Fragment, istransition:Boolean){
+        val fragmentTransition = requireActivity().supportFragmentManager.beginTransaction()
+
+        if (istransition){
+            fragmentTransition.setCustomAnimations(android.R.anim.slide_out_right,android.R.anim.slide_in_left)
+        }
+        fragmentTransition.replace(R.id.frameLayout,fragment).addToBackStack(fragment.javaClass.simpleName).commit()
     }
 
 }

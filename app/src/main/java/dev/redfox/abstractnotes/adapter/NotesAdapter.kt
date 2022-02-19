@@ -1,6 +1,7 @@
 package dev.redfox.abstractnotes.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import dev.redfox.abstractnotes.databinding.ItemRvNotesBinding
 
 class NotesAdapter() :
     RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
+    var listener: OnItemClickListener?=null
     var arrList= ArrayList<Notes>()
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -26,10 +28,24 @@ class NotesAdapter() :
         arrList = arrNotesList as ArrayList<Notes>
     }
 
+    fun setOnClickListener(listener1:OnItemClickListener){
+        listener=listener1
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.tvTitle.text = arrList[position].title
         holder.binding.tvDesc.text = arrList[position].noteText
         holder.binding.tvDateTime.text = arrList[position].dateTime
+
+        if (arrList[position].color != null){
+            holder.binding.cardView.setCardBackgroundColor(Color.parseColor(arrList[position].color))
+        }else{
+            holder.binding.cardView.setCardBackgroundColor(Color.parseColor("#39A3F6"))
+        }
+
+        holder.binding.cardView.setOnClickListener {
+            listener!!.onClicked(arrList[position].id!!)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -38,5 +54,9 @@ class NotesAdapter() :
 
     class ViewHolder(val binding: ItemRvNotesBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
 
+    }
+
+    interface OnItemClickListener{
+        fun onClicked(noteId:Int)
     }
 }
