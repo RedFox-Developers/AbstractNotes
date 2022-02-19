@@ -21,7 +21,7 @@
 
     <ImageView
         android:id="@+id/imgDone"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginEnd="@dimen/_10sdp"
@@ -46,7 +46,7 @@
         android:padding="@dimen/_10sdp"
         android:textColor="@color/ColorWhite"
         android:textColorHint="@color/ColorGray"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_20ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imgBack" />
@@ -66,7 +66,7 @@
         android:paddingStart="@dimen/_10sdp"
         android:textColor="@color/ColorGray"
         android:textColorHint="@color/ColorGray"
-        android:textSize="@dimen/_8ssp"
+        android:textSize="@dimen/_10ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etNoteTitle" />
@@ -102,7 +102,7 @@
             android:padding="@dimen/_10sdp"
             android:textColor="@color/ColorWhite"
             android:textColorHint="@color/ColorGray"
-            android:textSize="@dimen/_10ssp" />
+            android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
     <RelativeLayout
@@ -239,16 +239,17 @@
     <EditText
         android:id="@+id/etNoteDesc"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="350dp"
         android:layout_margin="@dimen/_10sdp"
         android:background="@null"
         android:fontFamily="@font/manrope_regular"
+        android:gravity="start"
         android:hint="@string/notes_desc"
         android:inputType="textMultiLine"
         android:padding="@dimen/_10sdp"
         android:textColor="@color/ColorWhite"
         android:textColorHint="@color/ColorGray"
-        android:textSize="@dimen/_12ssp"
+        android:textSize="@dimen/_16ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvWebLink" />
