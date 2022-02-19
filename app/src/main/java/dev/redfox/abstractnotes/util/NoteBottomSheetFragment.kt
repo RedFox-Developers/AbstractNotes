@@ -125,7 +125,7 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             binding.imgNote5.setImageResource(0)
             binding.imgNote6.setImageResource(0)
             binding.imgNote7.setImageResource(0)
-            selectedColor = "#ffd633"
+            selectedColor = "#654514"
 
             val intent = Intent("bottom_sheet_action")
             intent.putExtra("action","Yellow")
@@ -141,7 +141,7 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             binding.imgNote5.setImageResource(0)
             binding.imgNote6.setImageResource(0)
             binding.imgNote7.setImageResource(0)
-            selectedColor = "#ae3b76"
+            selectedColor = "#732993"
 
             val intent = Intent("bottom_sheet_action")
             intent.putExtra("action","Purple")
@@ -157,7 +157,7 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             binding.imgNote5.setImageResource(R.drawable.ic_tick)
             binding.imgNote6.setImageResource(0)
             binding.imgNote7.setImageResource(0)
-            selectedColor = "#0aebaf"
+            selectedColor = "#0E4E27"
 
             val intent = Intent("bottom_sheet_action")
             intent.putExtra("action","Green")
@@ -173,7 +173,7 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             binding.imgNote5.setImageResource(0)
             binding.imgNote6.setImageResource(R.drawable.ic_tick)
             binding.imgNote7.setImageResource(0)
-            selectedColor = "#ff7746"
+            selectedColor = "#A34D25"
             val intent = Intent("bottom_sheet_action")
             intent.putExtra("action","Orange")
             intent.putExtra("selectedColor",selectedColor)
@@ -187,7 +187,7 @@ class NoteBottomSheetFragment : BottomSheetDialogFragment() {
             binding.imgNote5.setImageResource(0)
             binding.imgNote6.setImageResource(0)
             binding.imgNote7.setImageResource(R.drawable.ic_tick)
-            selectedColor = "#202734"
+            selectedColor = "#3F3F3F"
 
             val intent = Intent("bottom_sheet_action")
             intent.putExtra("action","Black")
