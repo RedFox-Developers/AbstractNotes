@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base Application Theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -12,6 +12,7 @@
         <item name="android:textColorHint">@color/ColorGray</item>
         <item name="android:textSize">@dimen/_12sdp</item>
         <item name="android:backgroundTint">#222222</item>
+        <item name="font">@font/sofia_pro_soft_regular</item>
 
     </style>
 
