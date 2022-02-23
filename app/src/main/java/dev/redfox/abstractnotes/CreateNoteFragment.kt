@@ -34,7 +34,7 @@ import java.util.regex.Pattern
 class CreateNoteFragment : BaseFragment(), EasyPermissions.PermissionCallbacks,
     EasyPermissions.RationaleCallbacks {
 
-    var selectedColor = "#FF547B"
+    var selectedColor = "#FD8F45"
     var currentDate: String? = null
     private var READ_STORAGE_PERM = 123
     private var REQUEST_CODE_IMAGE = 456
